@@ -169,6 +169,10 @@ const app = (0, _express2.default)();
 
 (0, _middleware2.default)(app);
 
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
+
 // const PORT = process.env.PORT || 3333
 
 app.listen(_constants2.default.PORT, err => {
@@ -225,8 +229,15 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
 
 exports.default = app => {
+  if (isProd) {
+    app.use((0, _compression2.default)());
+    app.use(helmut());
+  }
   app.use(_bodyParser2.default.json());
   app.use(_bodyParser2.default.urlencoded({ extended: true }));
+  if (isDev) {
+    app.use((0, _morgan2.default)('development'));
+  }
 };
 
 /***/ }),
